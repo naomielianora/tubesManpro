@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "name": "tubesmanpro",
+  "description": "Proyek Pengembangan Website untuk Menampilkan Informasi/Dahsboard Data Promosi Toko Ritel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naomielianora/tubesManpro.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naomielianora/tubesManpro/issues"
+  },
+  "homepage": "https://github.com/naomielianora/tubesManpro#readme"
+}
