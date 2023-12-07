@@ -25,6 +25,10 @@ app.get('/see_report', (req, res)=>{
     res.render('see_report')
 })
 
+app.get('/see_report2', (req, res)=>{
+    res.render('see_report2')
+})
+
 //saat "Bar Chart" di klik
 app.get('/bar_chart', (req, res)=>{
     res.render('bar_chart')
