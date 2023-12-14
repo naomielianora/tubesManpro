@@ -30,5 +30,7 @@ CREATE TABLE `retail_marketing` (
   `AcceptedCmp1` int (2) NOT NULL,
   `AcceptedCmp2` int (2) NOT NULL,
   `Complain` int (2) NOT NULL,
+  `Z_CostContact` int (2) NOT NULL,
+  `Z_Revenue` int (2) NOT NULL,
   `Response` int (2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;

@@ -5,8 +5,7 @@ import fs from 'fs';
 
 const PORT = 8080;
 const app = express();
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ dest: 'uploads/' });
 
 app.listen(PORT, () => {
     console.log(`Server is ready, listening on port ${PORT}`);
@@ -39,6 +38,8 @@ const dbConnect = () => {
         )
     })
 };
+
+const conn = await dbConnect(); // Connect to the database
 //============================================================================================
 
 //page yang pertama kali muncul (home)
@@ -53,33 +54,58 @@ app.get('/add_data', (req, res)=>{
     res.render('add_data')
 })
 
-app.post('/uploadFile', upload.single('marketing_campaign'), (req, res) => {
+app.post('/uploadFile', upload.single('file_upload'), (req, res) => {
     const csvFile = req.file;
   
-    if (!csvFile) {
-      return res.status(400).send('No file uploaded.');
-    }
-  
+ 
     pool.getConnection((err, conn) => {
       if (err) {
         console.error('Error connecting to database:', err);
         res.status(500).send('Error connecting to database');
         return;
       }
+
+      
   
-      fs.createReadStream(csvFile.buffer)
+      fs.createReadStream(csvFile.path)
         .pipe(csvParser())
         .on('data', (row) => {
           const retailMarketing = {
-            No: row.NO,
             ID: row.ID,
-            //masukin kolom" lainnya
+            Year_Birth: row.Year_Birth,
+            Education: row.Education,
+            Marital_Status: row.Marital_Status,
+            Income: row.Income,
+            Kidhome: row.Kidhome,
+            Teenhome: row.Teenhome,
+            Dt_Customer: row.Dt_Customer,
+            Recency: row.Recency,
+            MntWines: row.MntWines,
+            MntFruits: row.MntFruits,
+            MntMeatProducts: row.MntMeatProducts,
+            MntFishProducts: row.MntFishProducts,
+            MntSweetProducts: row.MntSweetProducts,
+            MntGoldProds: row.MntGoldProds,
+            NumDealsPurchases: row.NumDealsPurchases,
+            NumWebPurchases: row.NumWebPurchases,
+            NumCatalogPurchases: row.NumCatalogPurchases,
+            NumStorePurchases: row.NumStorePurchases,
+            NumWebVisitsMonth: row.NumWebVisitsMonth,
+            AcceptedCmp3: row.AcceptedCmp3,
+            AcceptedCmp4: row.AcceptedCmp4,
+            AcceptedCmp5: row.AcceptedCmp5,
+            AcceptedCmp1: row.AcceptedCmp1,
+            AcceptedCmp2: row.AcceptedCmp2,
+            Complain: row.Complain,
+            Z_CostContact: row.Z_CostContact,
+            Z_Revenue: row.Z_Revenue,
+            Response: row.Response
           };
   
           const query = 'INSERT INTO retail_marketing SET ?';
           conn.query(query, retailMarketing, (error, results, fields) => {
             if (error) {
-              console.error('Error importing data to Bag table:', error);
+              console.error('Error importing data to Retail Marketing table:', error);
             }
           });
         })
