@@ -110,24 +110,49 @@ app.post('/uploadFile', upload.single('file_upload'), (req, res) => {
           conn.release();
           res.redirect('/add_data_conf');
         });
-    });
+      })
+      .on("end", () => {
+        conn.release();
+        res.redirect("/add_data_conf");
+      });
   });
-
+});
 
 //saat data dari csv sukses diinput ke database
-app.get('/add_data_conf', (req, res)=>{
-    res.render('add_data_conf')
-})
+app.get("/add_data_conf", (req, res) => {
+  res.render("add_data_conf");
+});
 //========================================================================
 
 //saat "See Report" di klik
-app.get('/see_report', (req, res)=>{
-    res.render('see_report')
-})
+app.get("/see_report", (req, res) => {
+  res.render("see_report");
+});
 
-app.get('/see_report2', (req, res)=>{
-    res.render('see_report2')
-})
+const getReport = (conn, agregat, kelompok, kolom) => {
+  return new Promise((resolve, reject) => {
+    conn.query(`SELECT ${kelompok} AS Kelompok, ${agregat}(${kolom}) AS Hasil FROM retail_marketing GROUP BY ${kelompok}`, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+app.post("/searched_report", async (req, res) => {
+  const conn = await dbConnect();
+  const { kelompok, agregat, kolom } = req.body;
+  const hasil = await getReport(conn, agregat, kelompok, kolom);
+  console.log(hasil);
+  res.render("searched_report", {
+    kelompok: kelompok,
+    agregat: agregat,
+    kolom: kolom,
+    rows: hasil,
+  });
+});
 
 //saat "Bar Chart" di klik
 app.get('/bar_chart', (req, res)=>{
@@ -153,6 +178,6 @@ app.get('/bar_chart', (req, res)=>{
 })
 
 //saat "Scatter Plot" di klik
-app.get('/scatter_plot', (req, res)=>{
-    res.render('scatter_plot')
-})
+app.get("/scatter_plot", (req, res) => {
+  res.render("scatter_plot");
+});
