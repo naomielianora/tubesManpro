@@ -56,7 +56,6 @@ app.get('/add_data', (req, res)=>{
 
 app.post('/uploadFile', upload.single('file_upload'), (req, res) => {
     const csvFile = req.file;
-  
  
     pool.getConnection((err, conn) => {
       if (err) {
@@ -64,8 +63,6 @@ app.post('/uploadFile', upload.single('file_upload'), (req, res) => {
         res.status(500).send('Error connecting to database');
         return;
       }
-
-      
   
       fs.createReadStream(csvFile.path)
         .pipe(csvParser())
@@ -134,7 +131,25 @@ app.get('/see_report2', (req, res)=>{
 
 //saat "Bar Chart" di klik
 app.get('/bar_chart', (req, res)=>{
-    res.render('bar_chart')
+    pool.getConnection((err, conn) => {
+      if (err) {
+        console.error('Error connecting to database:', err);
+        res.status(500).send('Error connecting to database');
+        return;
+      }
+      const sql = 'SHOW COLUMNS FROM `retail_marketing`';
+      conn.query(sql, (err, result) => {
+          if (err) {
+              reject(err);
+          } else {
+              console.log(result)
+              res.render('bar_chart', {
+                data: result
+              });
+          }
+      });
+    })
+    conn.release();
 })
 
 //saat "Scatter Plot" di klik
