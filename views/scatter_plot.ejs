@@ -3,11 +3,131 @@
 
 <head>
 	<title>RETAILDASH_SCATTER_PLOT</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/scatter_plot.css">
+	<!-- <script src="../scatter_plott.js"></script> -->
 </head>
 
 <body>
     <%- include('./layout/header.ejs') %>
+    <main>
+        <section>
+           
+            <form id="scatterForm" method="POST" action="/scatterPlot" enctype="multipart/form-data">
+                
+                <div class="dropdown-section">
+                    <label for="xAxis">Sumbu X:</label>
+                    <select id="xAxis" name="xAxis">
+                        <option value="sales">Penjualan</option>
+                        <option value="expenses">Biaya</option>
+                        
+                    </select>
+
+                    <label for="yAxis">Sumbu Y:</label>
+                    <select id="yAxis" name="yAxis">
+                        <option value="profit">Keuntungan</option>
+                        <option value="customers">Pelanggan</option>
+                        
+                    </select>
+
+                    <!-- <label for="color">Pilih Variabel untuk Warna:</label>
+                    <select id="color" name="color">
+                        <option value="category">Kategori</option>
+                        <option value="region">Region</option>
+                        
+                    </select> -->
+
+                    <input type="submit" value="Perbarui Scatterplot" id="searchButton">
+                </div>
+            </form>
+
+            <div class="scatter-container">
+                <canvas id="scatterChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <!-- server side rendering untuk scatter plot -->
+    <script>
+        var ctx = document.getElementById('scatterChart').getContext('2d');
+        var scatterChart;
+
+        document.getElementById('scatterForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+
+            //kirim data ke server menggunakan Fetch API
+            fetch('/scatterPlot', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateScatterplot(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        function updateScatterplot(data) {
+            var xAxisVariable = data.xAxis;
+            var yAxisVariable = data.yAxis;
+            var colorVariable = data.color;
+
+            //ambil data dari db
+            var scatterData = [
+                { x: 10, y: 20 },
+                { x: 15, y: 25 },
+                { x: 20, y: 15 },
+                { x: 25, y: 30 },
+                { x: 30, y: 10 },
+            ];
+
+            //array warna sesuai dengan jumlah data
+            var colorArray = [
+                'red', 'blue', 'green', 'orange', 'purple'
+            ];
+
+            if (scatterChart) {
+                scatterChart.destroy(); //buat apus chart(mencet tombol scatter plot)
+            }
+
+            scatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Scatter Plot',
+                        data: scatterData,
+                        backgroundColor: colorArray 
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: xAxisVariable
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: yAxisVariable
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>
