@@ -118,14 +118,14 @@ app.post('/uploadFile', upload.single('file_upload'), (req, res) => {
   });
 
 //saat data dari csv sukses diinput ke database
-app.get("/add_data_conf", (req, res) => {
-  res.render("add_data_conf");
+app.get('/add_data_conf', (req, res) => {
+  res.render('add_data_conf');
 });
 //========================================================================
 
 //saat "See Report" di klik
-app.get("/see_report", (req, res) => {
-  res.render("see_report");
+app.get('/see_report', (req, res) => {
+  res.render('see_report');
 });
 
 const getReport = (conn, agregat, kelompok, kolom) => {
@@ -140,7 +140,7 @@ const getReport = (conn, agregat, kelompok, kolom) => {
   });
 };
 
-app.post("/searched_report", async (req, res) => {
+app.post('/searched_report', async (req, res) => {
   const conn = await dbConnect();
   const { kelompok, agregat, kolom } = req.body;
   const hasil = await getReport(conn, agregat, kelompok, kolom);
@@ -175,6 +175,14 @@ app.get('/bar_chart', (req, res)=>{
 })
 
 //saat "Scatter Plot" di klik
-app.get("/scatter_plot", (req, res) => {
-  res.render("scatter_plot");
+app.get('/scatter_plot', (req, res)=>{
+    res.render('scatter_plot')
+})
+
+//server side rendering untuk scatter plot
+app.post('/scatterPlot', (req, res) => {
+    
+    // const data = req.body; //data yang dikirim dari formulir di halaman HTML
+   
+    res.json({ message: 'Scatter plot data received successfully.' });
 });
