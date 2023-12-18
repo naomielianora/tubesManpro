@@ -175,6 +175,14 @@ app.get('/bar_chart', (req, res)=>{
 })
 
 //saat "Scatter Plot" di klik
-app.get("/scatter_plot", (req, res) => {
-  res.render("scatter_plot");
+app.get('/scatter_plot', (req, res)=>{
+  res.render('scatter_plot')
+})
+
+//server side rendering untuk scatter plot
+app.post('/scatterPlot', (req, res) => {
+
+  // const data = req.body; //data yang dikirim dari formulir di halaman HTML
+
+  res.json({ message: 'Scatter plot data received successfully.' });
 });
