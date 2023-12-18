@@ -3,11 +3,19 @@
 
 <head>
 	<title>RETAILDASH_ADD_DATA</title>
-	<link rel="stylesheet" type="text/css" href="">
+	<link rel="stylesheet" type="text/css" href="/css/add_data.css">
 </head>
 
 <body>
     <%- include('./layout/header.ejs') %>
-
+	<div class = "add_data_content">
+        <form id="file" method="POST" action="/uploadFile" enctype="multipart/form-data">
+            <div id="text">
+                <label for="file">Drop CSV File Here!</label>
+                <input type="file" name="file_upload" id="file_upload" required>
+            </div>
+            <button name="upload" type="submit" id="upload">Upload</button>
+        </form>
+    </div>
 </body>
 </html>
