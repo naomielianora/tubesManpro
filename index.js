@@ -12,11 +12,15 @@ app.listen(PORT, () => {
 });
 
 app.set('view engine', 'ejs');
+//dipakai untuk page see report
+app.use(express.urlencoded({ extended: true }));
+//dipakai untuk routing path file css, assets
 app.use(express.static('public'));
 
 //DATABASE CONNECTION--------------------------------------------------------------------------------
 import mysql from 'mysql'
 
+//perlu dibuat terlebih dahulu database di phpmyadmin dengan nama "retaildash", lalu import file table structure.sql
 const pool = mysql.createPool({
     user: 'root',
     password: '',
@@ -111,12 +115,7 @@ app.post('/uploadFile', upload.single('file_upload'), (req, res) => {
           res.redirect('/add_data_conf');
         });
       })
-      .on("end", () => {
-        conn.release();
-        res.redirect("/add_data_conf");
-      });
   });
-});
 
 //saat data dari csv sukses diinput ke database
 app.get("/add_data_conf", (req, res) => {
@@ -145,7 +144,6 @@ app.post("/searched_report", async (req, res) => {
   const conn = await dbConnect();
   const { kelompok, agregat, kolom } = req.body;
   const hasil = await getReport(conn, agregat, kelompok, kolom);
-  console.log(hasil);
   res.render("searched_report", {
     kelompok: kelompok,
     agregat: agregat,
@@ -162,12 +160,11 @@ app.get('/bar_chart', (req, res)=>{
         res.status(500).send('Error connecting to database');
         return;
       }
-      const sql = 'SHOW COLUMNS FROM `retail_marketing`';
+      const sql = 'SHOW COLUMNS FROM retail_marketing';
       conn.query(sql, (err, result) => {
           if (err) {
               reject(err);
           } else {
-              console.log(result)
               res.render('bar_chart', {
                 data: result
               });
