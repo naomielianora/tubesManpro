@@ -174,6 +174,25 @@ app.get('/bar_chart', (req, res)=>{
     conn.release();
 })
 
+app.post('/getDataGrafik', async (req, res) => {
+  pool.getConnection((err, conn) => {
+    if (err) {
+      console.error('Error connecting to database:', err);
+      res.status(500).send('Error connecting to database');
+      return;
+    }
+    const sql = 'SELECT ?, COUNT(?) as `Jumlah` FROM `retail_marketing` GROUP BY ?';
+    conn.query(sql,[hehe], (err, result) => {
+        if (err) {
+            reject(err);
+        } else {
+            res.json(result);
+        }
+    });
+  })
+  conn.release();
+})
+
 //saat "Scatter Plot" di klik
 app.get('/scatter_plot', (req, res)=>{
   res.render('scatter_plot')
