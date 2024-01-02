@@ -153,44 +153,30 @@ app.post("/searched_report", async (req, res) => {
 
 //saat "Bar Chart" di klik
 app.get("/bar_chart", (req, res) => {
-  pool.getConnection((err, conn) => {
-    if (err) {
-      console.error("Error connecting to database:", err);
-      res.status(500).send("Error connecting to database");
-      return;
-    }
-    const sql = "SHOW COLUMNS FROM retail_marketing";
-    conn.query(sql, (err, result) => {
+  res.render("bar_chart");
+});
+
+app.get("/getData", async (req, res) => {
+  const kat = req.query.kategori;
+  const conn = await dbConnect();
+  const barData = await getBarData(conn, kat);
+  res.json(barData);
+});
+
+const getBarData = (conn, kategori) => {
+  return new Promise((resolve, reject) => {
+    // Lakukan query ke database untuk mendapatkan data scatter plot
+    const query = `SELECT ${kategori} as 'sbx', COUNT(${kategori}) as 'jumlah' FROM retail_marketing GROUP BY ${kategori}`;
+    conn.query(query,(err, result) => {
       if (err) {
         reject(err);
       } else {
-        res.render("bar_chart", {
-          data: result,
-        });
+        resolve(result);
       }
     });
   });
-  conn.release();
-});
+};
 
-app.post('/getDataGrafik', async (req, res) => {
-  pool.getConnection((err, conn) => {
-    if (err) {
-      console.error('Error connecting to database:', err);
-      res.status(500).send('Error connecting to database');
-      return;
-    }
-    const sql = 'SELECT ?, COUNT(?) as `Jumlah` FROM `retail_marketing` GROUP BY ?';
-    conn.query(sql,[hehe], (err, result) => {
-        if (err) {
-            reject(err);
-        } else {
-            res.json(result);
-        }
-    });
-  })
-  conn.release();
-})
 
 //saat "Scatter Plot" di klik
 app.get("/scatter_plot", (req, res) => {
