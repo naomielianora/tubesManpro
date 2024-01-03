@@ -1,99 +1,93 @@
-
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
 }
 
 main {
-    padding: 20px;
+  padding: 20px;
 }
-
 
 .summary-container-wrapper {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
-
 
 .summary-container {
-    background-color: white;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
-    flex: 1;
-   margin-left: 20px;
-    max-width: calc(50% - 10px);
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+  flex: 1;
+  margin-left: 20px;
+  max-width: calc(50% - 10px);
 }
-
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
-#judul{
-    margin-bottom: 10px;
-    margin-top: 6px;
+#judul {
+  margin-bottom: 10px;
+  margin-top: 6px;
 }
 
 .dropdown-section {
-    margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .dropdown-section label {
-    margin-right: 10px; 
+  margin-right: 10px;
 }
 
 .dropdown-section select {
-    padding: 5px; 
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 20px; 
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 20px;
 }
 
-    #searchButton {
-        padding: 5px 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
+#searchButton {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+}
 
 .dropdown-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .dropdown-section label {
-    margin-right: 10px;
-    font-weight: bold;
+  margin-right: 10px;
+  font-weight: bold;
 }
 
 .dropdown-section select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 20px;
-    width: 150px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 20px;
+  width: 150px;
 }
-
-
 
 #searchButton:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
-

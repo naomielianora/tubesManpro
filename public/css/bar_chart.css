@@ -41,3 +41,27 @@ main {
     cursor: pointer;
     text-decoration: none;
 }
+
+#graphs{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 450px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgb(185, 185, 185);
+}
+
+#graph{
+    height: 450px;
+    width: 900px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#back, #forward {  
+    font-size: 40px;
+    color: #a48df0;
+    margin: 10px;
+}

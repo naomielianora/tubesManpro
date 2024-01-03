@@ -1,133 +1,170 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>RETAILDASH_SCATTER_PLOT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/scatter_plot.css" />
+    <!-- <script src="../scatter_plott.js"></script> -->
+  </head>
 
-<head>
-	<title>RETAILDASH_SCATTER_PLOT</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="">
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/scatter_plot.css">
-	<!-- <script src="../scatter_plott.js"></script> -->
-</head>
-
-<body>
+  <body>
     <%- include('./layout/header.ejs') %>
     <main>
-        <section>
-           
-            <form id="scatterForm" method="POST" action="/scatterPlot" enctype="multipart/form-data">
-                
-                <div class="dropdown-section">
-                    <label for="xAxis">Sumbu X:</label>
-                    <select id="xAxis" name="xAxis">
-                        <option value="sales">Penjualan</option>
-                        <option value="expenses">Biaya</option>
-                        
-                    </select>
+      <section>
+        <form id="scatterForm" method="POST" action="/scatterPlot">
+          <div class="dropdown-section">
+            <label for="xAxis">Sumbu X:</label>
+            <select id="xAxis" name="xAxis">
+              <option value="Year_Birth">Year Birth</option>
+              <option value="Income">Income</option>
+              <option value="Kidhome">Kidhome</option>
+              <option value="Teenhome">Teenhome</option>
+              <option value="Recency">Recency</option>
+              <option value="MntWines">Amount spent on wine</option>
+              <option value="MntFruits">Amount spent on fruits</option>
+              <option value="MntMeatProducts">Amount spent on meat</option>
+              <option value="MntFishProducts">Amount spent on fish</option>
+              <option value="MntSweetProducts">Amount spent on sweets</option>
+              <option value="MntGoldProds">Amount spent on gold</option>
+              <option value="NumDealsPurchases">Number of purchases with discount</option>
+              <option value="NumWebPurchases">Number of purchases made through company's web</option>
+              <option value="NumCatalogPurchases">Number of purchases made using catalog</option>
+              <option value="NumStorePurchases">Number of purchases made directly in store</option>
+              <option value="NumWebVisitsMonth">Number of visits to company's web in the last month</option>
+              <option value="Complain">Complain</option>
+              <option value="AcceptedCmp1">Accepted in 1st Campaign</option>
+              <option value="AcceptedCmp2">Accepted in 2nd Campaign</option>
+              <option value="AcceptedCmp3">Accepted in 3rd Campaign</option>
+              <option value="AcceptedCmp4">Accepted in 4th Campaign</option>
+              <option value="AcceptedCmp5">Accepted in 5th Campaign</option>
+              <option value="Response">Response</option>
+            </select>
 
-                    <label for="yAxis">Sumbu Y:</label>
-                    <select id="yAxis" name="yAxis">
-                        <option value="profit">Keuntungan</option>
-                        <option value="customers">Pelanggan</option>
-                        
-                    </select>
+            <label for="yAxis">Sumbu Y:</label>
+            <select id="yAxis" name="yAxis">
+              <option value="Year_Birth">Year Birth</option>
+              <option value="Income">Income</option>
+              <option value="Kidhome">Kidhome</option>
+              <option value="Teenhome">Teenhome</option>
+              <option value="Recency">Recency</option>
+              <option value="MntWines">Amount spent on wine</option>
+              <option value="MntFruits">Amount spent on fruits</option>
+              <option value="MntMeatProducts">Amount spent on meat</option>
+              <option value="MntFishProducts">Amount spent on fish</option>
+              <option value="MntSweetProducts">Amount spent on sweets</option>
+              <option value="MntGoldProds">Amount spent on gold</option>
+              <option value="NumDealsPurchases">Number of purchases with discount</option>
+              <option value="NumWebPurchases">Number of purchases made through company's web</option>
+              <option value="NumCatalogPurchases">Number of purchases made using catalog</option>
+              <option value="NumStorePurchases">Number of purchases made directly in store</option>
+              <option value="NumWebVisitsMonth">Number of visits to company's web in the last month</option>
+              <option value="Complain">Complain</option>
+              <option value="AcceptedCmp1">Accepted in 1st Campaign</option>
+              <option value="AcceptedCmp2">Accepted in 2nd Campaign</option>
+              <option value="AcceptedCmp3">Accepted in 3rd Campaign</option>
+              <option value="AcceptedCmp4">Accepted in 4th Campaign</option>
+              <option value="AcceptedCmp5">Accepted in 5th Campaign</option>
+              <option value="Response">Response</option>
+            </select>
+            <!-- 
+            <label for="color">Pilih Variabel untuk Warna:</label>
+            <select id="color" name="color">
+              <option value="Blue">Blue</option>
+              <option value="Red">Red</option>
+            </select> -->
 
-                    <!-- <label for="color">Pilih Variabel untuk Warna:</label>
-                    <select id="color" name="color">
-                        <option value="category">Kategori</option>
-                        <option value="region">Region</option>
-                        
-                    </select> -->
+            <input type="submit" value="Perbarui Scatterplot" id="updateButton" />
+          </div>
+        </form>
 
-                    <input type="submit" value="Perbarui Scatterplot" id="searchButton">
-                </div>
-            </form>
-
-            <div class="scatter-container">
-                <canvas id="scatterChart" width="400" height="200"></canvas>
-            </div>
-        </section>
+        <div class="scatter-container">
+          <canvas id="scatterChart" width="400" height="200"></canvas>
+        </div>
+      </section>
     </main>
 
     <!-- server side rendering untuk scatter plot -->
     <script>
-        var ctx = document.getElementById('scatterChart').getContext('2d');
-        var scatterChart;
+      var ctx = document.getElementById("scatterChart").getContext("2d");
+      var scatterChart;
+      var formData;
+      document.getElementById("scatterForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-        document.getElementById('scatterForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+        formData = new FormData(event.target);
 
-            var formData = new FormData(this);
-
-            //kirim data ke server menggunakan Fetch API
-            fetch('/scatterPlot', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    updateScatterplot(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+        // Convert formData to a plain object
+        var formDataObject = {};
+        formData.forEach(function (value, key) {
+          formDataObject[key] = value;
         });
 
-        function updateScatterplot(data) {
-            var xAxisVariable = data.xAxis;
-            var yAxisVariable = data.yAxis;
-            var colorVariable = data.color;
+        fetch("/scatterPlot", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formDataObject),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            updateScatterplot(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      });
 
-            //ambil data dari db
-            var scatterData = [
-                { x: 10, y: 20 },
-                { x: 15, y: 25 },
-                { x: 20, y: 15 },
-                { x: 25, y: 30 },
-                { x: 30, y: 10 },
-            ];
+      function updateScatterplot(data) {
+        var xAxisVariable = formData.get("xAxis");
+        var yAxisVariable = formData.get("yAxis");
+        //var colorVariable = data.color;
 
-            //array warna sesuai dengan jumlah data
-            var colorArray = [
-                'red', 'blue', 'green', 'orange', 'purple'
-            ];
+        //ambil data dari db
+        var scatterData = data.scatterData;
 
-            if (scatterChart) {
-                scatterChart.destroy(); //buat apus chart(mencet tombol scatter plot)
-            }
+        //array warna sesuai dengan jumlah data
+        var colorArray = ["red", "blue", "green", "orange", "purple"];
 
-            scatterChart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Scatter Plot',
-                        data: scatterData,
-                        backgroundColor: colorArray 
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: xAxisVariable
-                            }
-                        },
-                        y: {
-                            type: 'linear',
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: yAxisVariable
-                            }
-                        }
-                    }
-                }
-            });
+        if (scatterChart) {
+          scatterChart.destroy(); //buat apus chart(mencet tombol scatter plot)
         }
-    </script>
 
-</body>
+        scatterChart = new Chart(ctx, {
+          type: "scatter",
+          data: {
+            datasets: [
+              {
+                label: "Scatter Plot",
+                data: scatterData,
+                backgroundColor: colorArray,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              x: {
+                type: "linear",
+                position: "bottom",
+                title: {
+                  display: true,
+                  text: xAxisVariable,
+                },
+              },
+              y: {
+                type: "linear",
+                position: "left",
+                title: {
+                  display: true,
+                  text: yAxisVariable,
+                },
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
 </html>

@@ -2,9 +2,9 @@
 <html>
 
 <head>
-	<title>RETAILDASH_BAR_CHART
-    </title>
+	<title>RETAILDASH_BAR_CHART</title>
     <link rel="stylesheet" type="text/css" href="/css/bar_chart.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -12,16 +12,113 @@
     <main>
         <section>
             <h2>Bar Chart</h2>
-			<div class="inputvar">
-				<label for="variable">Variable:</label>
+			<form class="inputvar">
+				<label for="kategori">Variable:</label>
 				<select id="kategori" name="kategori">
-                    <% for (let i=0; i<data.length; i++) { %>
-					<option value="<%= data[i].Field %>"><%= data[i].Field %></option>
-					<% } %>
+                    <option value="Year_Birth">Year Birth</option>
+                    <option value="Education">Education</option>
+                    <option value="Marital_Status">Marital Status</option>
+                    <option value="Kidhome">Kidhome</option>
+                    <option value="Teenhome">Teenhome</option>
+                    <option value="Complain">Complain</option>
+                    <option value="AcceptedCmp1">Accepted in 1st Campaign</option>
+                    <option value="AcceptedCmp2">Accepted in 2nd Campaign</option>
+                    <option value="AcceptedCmp3">Accepted in 3rd Campaign</option>
+                    <option value="AcceptedCmp4">Accepted in 4th Campaign</option>
+                    <option value="AcceptedCmp5">Accepted in 5th Campaign</option>
+                    <option value="Response">Response</option>
+                    <option value="Income">Income</option>
+                    <option value="Recency">Recency</option>
+                    <option value="MntWines">Amount spent on wine</option>
+                    <option value="MntFruits">Amount spent on fruits</option>
+                    <option value="MntMeatProducts">Amount spent on meat</option>
+                    <option value="MntFishProducts">Amount spent on fish</option>
+                    <option value="MntSweetProducts">Amount spent on sweets</option>
+                    <option value="MntGoldProds">Amount spent on gold</option>
+                    <option value="NumDealsPurchases">Number of purchases with discount</option>
+                    <option value="NumWebPurchases">Number of purchases made through company's web</option>
+                    <option value="NumCatalogPurchases">Number of purchases made using catalog</option>
+                    <option value="NumStorePurchases">Number of purchases made directly in store</option>
+                    <option value="NumWebVisitsMonth">Number of visits to company's web in the last month</option>
 				</select>
-				<a href="/bar_chart" id="tampilkanButton">Tampilkan</a>
-			</div>
+				<!-- <button id="tampilkanButton" type="submit">Tampilkan</button> -->
+			</form>
+            <div id="graphs">
+                <div id="graph">
+                    <canvas id="chart1" height="400px" width="900px"></canvas>
+                </div>
+            </div>
         </section>
     </main>
+    <script>
+        // const button = document.querySelector("button[id='tampilkanButton']");
+        const kategori = document.querySelector("select[name='kategori']");
+        var ctx = document.getElementById('chart1').getContext('2d');
+        let myChart;
+        let result;
+        
+        function graph(){
+            const sumbux = result.map(item => item.sbx);
+            const jumlah = result.map(item => item.jumlah);
+    
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                labels: sumbux,
+                datasets: [{
+                    label: 'Jumlah',
+                    data: jumlah,
+                    backgroundColor: '#2196F3',
+                    borderColor: '#1A4A79',
+                    borderWidth: 1,
+                    barThickness: 10, 
+                    width: 20
+                }]
+                },
+                options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: kategori.value
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Frequency'
+                        },
+                        beginAtZero: true,
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 10
+                    }
+                }
+                }
+            });
+        }
+            
+        kategori.addEventListener('input', () => {
+            // data variable
+            const data = {
+                kategori: kategori.value
+            };
+            const params = new URLSearchParams(data);
+            const q = params.toString();
+            const url = "/getData?" + q;
+
+            fetch(url).then(onSuccess1).then(showResult1);
+            function onSuccess1(response){
+                return response.json();
+            };
+            function showResult1(result1){
+                if (myChart !== undefined){
+                    myChart.destroy()
+                }
+                result = result1
+                graph()
+            };
+        });
+    </script>
 </body>
 </html>
